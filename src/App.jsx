@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ReportList from './pages/Reports/ReportList';
+import PendingReportList from './pages/Reports/PendingReportList';
 import ReportDetail from './pages/Reports/ReportDetail';
 import CreateUser from './pages/Users/CreateUser';
 import AdminLayout from './components/admin/AdminLayout';
@@ -45,6 +46,7 @@ function App() {
                             <Route path="/dashboard" element={<Dashboard />} />
 
                             <Route path="/reports" element={<ReportList />} />
+                            <Route path="/pending-reports" element={<PendingReportList />} />
                             <Route path="/report/:id" element={<ReportDetail />} />
 
                             {/* Admin Only Route */}

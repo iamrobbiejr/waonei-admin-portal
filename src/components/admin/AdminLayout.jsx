@@ -21,7 +21,8 @@ const AdminLayout = () => {
 
     const navigation = [
         { name: 'Dashboard', href: '/dashboard', icon: BarChart2 },
-        { name: 'Reports', href: '/reports', icon: FileText },
+        { name: 'Verified Reports', href: '/reports', icon: FileText },
+        { name: 'Pending Reports', href: '/pending-reports', icon: ShieldAlert },
         { name: 'Users', href: '/users', icon: Users, adminOnly: true },
     ];
 

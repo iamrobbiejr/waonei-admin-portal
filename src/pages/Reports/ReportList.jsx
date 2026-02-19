@@ -66,7 +66,7 @@ const ReportList = () => {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                <h1 className="text-2xl font-bold text-gray-800">Violation Reports</h1>
+                <h1 className="text-2xl font-bold text-gray-800">Verified Reports</h1>
 
                 {/* Filters */}
                 <div className="flex space-x-2">
