@@ -19,6 +19,7 @@ import {
     ExternalLink,
     AlertCircle
 } from 'lucide-react';
+import LocationMap from '../../components/Map/LocationMap';
 import { format } from 'date-fns';
 import { cn } from '../../lib/utils';
 import { motion } from 'framer-motion';
@@ -32,19 +33,28 @@ const ReportDetail = () => {
 
     useEffect(() => {
         const fetchReport = async () => {
+            setLoading(true);
+            setReport(null);
+            setError(null);
+            console.log(`Fetching report details for ID: ${id}`);
             try {
                 const response = await api.get(`/report/${id}`);
                 if (response.data.success) {
                     setReport(response.data.report);
+                } else {
+                    setError(response.data.message || "Failed to load report details.");
                 }
             } catch (err) {
+                console.error("Error fetching report:", err);
                 setError("Failed to load report details.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchReport();
+        if (id) {
+            fetchReport();
+        }
     }, [id]);
 
     if (loading) return (
@@ -190,7 +200,7 @@ const ReportDetail = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
                             <div>
                                 <p className="text-xs text-gray-500 uppercase font-bold mb-1">Model Version</p>
-                                <p className="text-sm font-medium">{report.ai_model_version || 'N/A'}</p>
+                                <p className="text-sm font-medium">YOLOv8</p>
                             </div>
                             <div>
                                 <p className="text-xs text-gray-500 uppercase font-bold mb-1">Processing Time</p>
@@ -205,7 +215,7 @@ const ReportDetail = () => {
                                             style={{ width: `${(report.confidence_score || 0) * 100}%` }}
                                         />
                                     </div>
-                                    <p className="text-sm font-bold">{(report.confidence_score * 100).toFixed(1)}%</p>
+                                    <p className="text-sm font-bold">{(report.confidence_score ? (report.confidence_score * 100).toFixed(1) : '0.0')}%</p>
                                 </div>
                             </div>
                             <div className="md:col-span-2 lg:col-span-3">
@@ -229,18 +239,20 @@ const ReportDetail = () => {
                                     <p className="text-xs text-gray-500 uppercase font-bold mb-1">Coordinates</p>
                                     <p className="text-sm font-mono">{report.latitude}, {report.longitude}</p>
                                 </div>
+                                <div className="pt-2">
+                                    <p className="text-xs text-gray-500 uppercase font-bold mb-1">Description</p>
+                                    <p className="text-sm text-gray-700 italic">{report.location_description || 'No specific description provided'}</p>
+                                </div>
                             </div>
                             <div className="md:col-span-2">
                                 {report.latitude && report.longitude ? (
-                                    <div className="bg-gray-100 rounded-xl h-48 flex items-center justify-center text-gray-500 border border-gray-200 overflow-hidden relative">
-                                        <MapPin className="h-8 w-8 text-red-500 absolute z-10 animate-bounce" />
-                                        <div className="absolute inset-0 bg-[url('https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s-l+ff0000(${report.longitude},${report.latitude})/${report.longitude},${report.latitude},14,0/600x400?access_token=YOUR_TOKEN')] bg-cover bg-center">
-                                            {/* Static map placeholder */}
-                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center italic">
-                                                [Map Visual Placeholder]
-                                            </div>
-                                        </div>
-                                        <div className="absolute bottom-2 left-2 right-2 bg-white/80 backdrop-blur-sm p-2 rounded text-[10px] text-center">
+                                    <div className="h-48 relative">
+                                        <LocationMap
+                                            lat={parseFloat(report.latitude)}
+                                            lng={parseFloat(report.longitude)}
+                                            description={report.location_description}
+                                        />
+                                        <div className="absolute bottom-2 left-2 right-2 bg-white/80 backdrop-blur-sm p-2 rounded text-[10px] text-center z-[1000]">
                                             {report.location_description}
                                         </div>
                                     </div>
@@ -276,16 +288,17 @@ const ReportDetail = () => {
                             <span className={cn(
                                 "px-4 py-2 text-sm font-bold rounded-xl inline-block",
                                 report.status === 'verified' ? "bg-green-100 text-green-800" :
-                                    report.status === 'pending_analysis' ? "bg-yellow-100 text-yellow-800" :
-                                        "bg-gray-100 text-gray-800"
+                                    report.status === 'no_violation' ? "bg-green-100 text-green-800 border border-green-200" :
+                                        report.status === 'pending_analysis' ? "bg-yellow-100 text-yellow-800" :
+                                            "bg-gray-100 text-gray-800"
                             )}>
                                 {report.status.replace('_', ' ').toUpperCase()}
                             </span>
                         </div>
 
                         <div className="space-y-3">
-                            <InfoRow label="Violation" value={<span className="capitalize">{report.violation_type?.replace('_', ' ') || 'Detecting...'}</span>} />
-                            <InfoRow label="Reported As" value={<span className="capitalize">{report.reported_violation_type?.replace('_', ' ') || '-'}</span>} />
+                            <InfoRow label="Violation" value={<span className="capitalize">{report.violation_type?.replace(/_/g, ' ') || 'Detecting...'}</span>} />
+                            <InfoRow label="Reported As" value={<span className="capitalize">{report.reported_violation_type?.replace(/_/g, ' ') || report.violation_type?.replace(/_/g, ' ') || '-'}</span>} />
                             <InfoRow label="Visibility" value={report.is_public ? 'Public' : 'Private'} />
                             <InfoRow label="Anonymized" value={report.anonymized ? 'Yes' : 'No'} />
                         </div>

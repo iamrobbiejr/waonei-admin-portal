@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../lib/api';
+import { Link } from 'react-router-dom';
 import {
     BarChart2,
     AlertTriangle,
@@ -11,6 +12,7 @@ import {
     MapPin
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import DashboardHeatmap from '../components/Map/DashboardHeatmap';
 
 const StatCard = ({ title, value, icon: Icon, color, subtext }) => (
     <motion.div
@@ -110,6 +112,27 @@ const Dashboard = () => {
                     subtext="Reports in last 24h"
                 />
             </div>
+
+            {/* Activity Heatmap Preview */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+            >
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+                        <MapPin className="h-5 w-5 text-red-500 mr-2" />
+                        Geographic Hotspots
+                    </h3>
+                    <Link
+                        to="/heatmap"
+                        className="text-xs text-blue-600 font-bold hover:underline"
+                    >
+                        View Full Heatmap
+                    </Link>
+                </div>
+                <DashboardHeatmap />
+            </motion.div>
 
             {/* Detailed Breakdown */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

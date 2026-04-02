@@ -124,7 +124,10 @@ const PendingReportList = () => {
                                         Status
                                     </th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Violation
+                                        AI Detected
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Reported As
                                     </th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Plate Number
@@ -158,11 +161,14 @@ const PendingReportList = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-900 capitalize font-medium">
-                                                {report.violation_type?.replace(/_/g, ' ') || report.reported_violation_type?.replace(/_/g, ' ') || 'Unknown'}
+                                                {report.violation_type?.replace(/_/g, ' ') || 'Detecting...'}
                                             </div>
                                             <div className="text-xs text-gray-500">
                                                 Conf: {report.confidence_score ? `${(report.confidence_score * 100).toFixed(0)}%` : 'N/A'}
                                             </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">
+                                            {report.reported_violation_type?.replace(/_/g, ' ') || report.violation_type?.replace(/_/g, ' ') || '-'}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <div className="flex items-center">

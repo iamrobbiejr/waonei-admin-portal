@@ -7,7 +7,9 @@ import {
     Users,
     LogOut,
     ShieldAlert,
+    CheckCircle,
     Menu,
+    MapPin,
     X
 } from 'lucide-react';
 import { useState } from 'react';
@@ -23,6 +25,8 @@ const AdminLayout = () => {
         { name: 'Dashboard', href: '/dashboard', icon: BarChart2 },
         { name: 'Verified Reports', href: '/reports', icon: FileText },
         { name: 'Pending Reports', href: '/pending-reports', icon: ShieldAlert },
+        { name: 'No Violations', href: '/no-violations', icon: CheckCircle },
+        { name: 'Heatmap', href: '/heatmap', icon: MapPin },
         { name: 'Users', href: '/users', icon: Users, adminOnly: true },
     ];
 

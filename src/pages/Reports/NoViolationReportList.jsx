@@ -7,32 +7,31 @@ import {
     Filter,
     ChevronLeft,
     ChevronRight,
-    AlertCircle
+    AlertCircle,
+    CheckCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '../../lib/utils';
 import { motion } from 'framer-motion';
 
-const ReportList = () => {
+const NoViolationReportList = () => {
     const navigate = useNavigate();
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
-    const [statusFilter, setStatusFilter] = useState('verified'); // default to verified
     const [violationType, setViolationType] = useState('all');
 
     const limit = 10;
+    const statusFilter = 'no_violation';
 
     useEffect(() => {
         fetchReports();
-    }, [page, statusFilter, violationType]);
+    }, [page, violationType]);
 
     const fetchReports = async () => {
         setLoading(true);
         try {
-            // Note: API endpoint path based on provided python code is /violations
-            // It accepts limit, offset, violation_type, status
             const offset = page * limit;
             const response = await api.get('/violations', {
                 params: {
@@ -48,39 +47,22 @@ const ReportList = () => {
                 setHasMore(response.data.pagination.has_more);
             }
         } catch (error) {
-            console.error("Failed to fetch reports", error);
+            console.error("Failed to fetch no-violation reports", error);
         } finally {
             setLoading(false);
-        }
-    };
-
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'verified': return 'bg-green-100 text-green-800';
-            case 'pending_analysis': return 'bg-yellow-100 text-yellow-800';
-            case 'rejected': return 'bg-red-100 text-red-800';
-            default: return 'bg-gray-100 text-gray-800';
         }
     };
 
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                <h1 className="text-2xl font-bold text-gray-800">Verified Reports</h1>
+                <div className="flex items-center">
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-2" />
+                    <h1 className="text-2xl font-bold text-gray-800">No Violations</h1>
+                </div>
 
                 {/* Filters */}
                 <div className="flex space-x-2">
-                    <select
-                        value={statusFilter}
-                        onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
-                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm"
-                    >
-                        <option value="verified">Verified</option>
-                        <option value="pending_analysis">Pending Analysis</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="processed">Processed</option>
-                    </select>
-
                     <select
                         value={violationType}
                         onChange={(e) => { setViolationType(e.target.value); setPage(0); }}
@@ -98,13 +80,13 @@ const ReportList = () => {
             <div className="bg-white shadow overflow-hidden sm:rounded-lg border border-gray-200">
                 {loading ? (
                     <div className="p-12 flex justify-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
                     </div>
                 ) : reports.length === 0 ? (
                     <div className="p-12 text-center text-gray-500">
                         <AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
                         <h3 className="mt-2 text-sm font-medium text-gray-900">No reports found</h3>
-                        <p className="mt-1 text-sm text-gray-500">Try adjusting your filters.</p>
+                        <p className="mt-1 text-sm text-gray-500">There are currently no reports marked as "No Violation".</p>
                     </div>
                 ) : (
                     <table className="min-w-full divide-y divide-gray-200">
@@ -117,13 +99,7 @@ const ReportList = () => {
                                     Status
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Violation
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Reported As
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Confidence
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Date
@@ -145,18 +121,12 @@ const ReportList = () => {
                                         {report.id.substring(0, 8)}...
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={cn("px-2 inline-flex text-xs leading-5 font-semibold rounded-full", getStatusColor(report.status))}>
-                                            {report.status}
+                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            No Violation
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 capitalize">
-                                        {report.violation_type?.replace(/_/g, ' ') || 'Unknown'}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">
-                                        {report.reported_violation_type?.replace(/_/g, ' ') || report.violation_type?.replace(/_/g, ' ') || '-'}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {report.confidence_score ? `${(report.confidence_score * 100).toFixed(0)}%` : '-'}
+                                        {report.reported_violation_type?.replace(/_/g, ' ') || report.violation_type?.replace(/_/g, ' ') || 'Unknown'}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {format(new Date(report.created_at), 'MMM d, yyyy HH:mm')}
@@ -226,4 +196,4 @@ const ReportList = () => {
     );
 };
 
-export default ReportList;
+export default NoViolationReportList;
