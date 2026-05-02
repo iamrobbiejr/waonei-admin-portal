@@ -175,10 +175,10 @@ const ReportDetail = () => {
                                 {report.description || "No description provided by the reporter."}
                             </div>
 
-                            <SectionHeader icon={ShieldCheck} title="Verification Notes" color="text-green-500" />
-                            <div className="prose prose-sm italic text-gray-500">
-                                {report.verification_notes || "No verification notes available."}
-                            </div>
+                            {/*<SectionHeader icon={ShieldCheck} title="Verification Notes" color="text-green-500" />*/}
+                            {/*<div className="prose prose-sm italic text-gray-500">*/}
+                            {/*    {report.verification_notes || "No verification notes available."}*/}
+                            {/*</div>*/}
                         </div>
 
                         {/* Vehicle Details */}
@@ -189,7 +189,7 @@ const ReportDetail = () => {
                                 <InfoRow label="Plate Confidence" value={report.vehicle_plate_confidence ? `${(report.vehicle_plate_confidence * 100).toFixed(1)}%` : null} />
                                 <InfoRow label="Estimated Color" value={report.vehicle_details?.color} />
                                 <InfoRow label="Estimated Make" value={report.vehicle_details?.make} />
-                                <InfoRow label="Severity Score" value={report.severity_score} />
+                                {/*<InfoRow label="Severity Score" value={report.severity_score} />*/}
                             </div>
                         </div>
                     </div>
@@ -232,9 +232,9 @@ const ReportDetail = () => {
                         <SectionHeader icon={MapPin} title="Location Details" color="text-red-500" />
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             <div className="col-span-1 space-y-3">
-                                <InfoRow label="City" value={report.city} />
+                                {/*<InfoRow label="City" value={report.city} />*/}
                                 <InfoRow label="Country" value={report.country} />
-                                <InfoRow label="Address" value={report.address} />
+                                {/*<InfoRow label="Address" value={report.address} />*/}
                                 <div className="pt-2">
                                     <p className="text-xs text-gray-500 uppercase font-bold mb-1">Coordinates</p>
                                     <p className="text-sm font-mono">{report.latitude}, {report.longitude}</p>
@@ -347,31 +347,31 @@ const ReportDetail = () => {
                     </div>
 
                     {/* Context/Environment */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <SectionHeader icon={CloudSun} title="Environment" color="text-yellow-500" />
-                        <div className="space-y-2">
-                            <InfoRow label="Time of Day" value={report.time_of_day} />
-                            <InfoRow label="Weather" value={report.weather_conditions} />
-                            <InfoRow label="Evidence Quality" value={report.evidence_quality} />
-                        </div>
-                    </div>
+                    {/*<div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">*/}
+                    {/*    <SectionHeader icon={CloudSun} title="Environment" color="text-yellow-500" />*/}
+                    {/*    <div className="space-y-2">*/}
+                    {/*        <InfoRow label="Time of Day" value={report.time_of_day} />*/}
+                    {/*        <InfoRow label="Weather" value={report.weather_conditions} />*/}
+                    {/*        <InfoRow label="Evidence Quality" value={report.evidence_quality} />*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
                     {/* Metadata & Technical */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                        <SectionHeader icon={Tag} title="Technical Data" color="text-gray-400" />
-                        <div className="space-y-2">
-                            <InfoRow label="Views" value={report.view_count || 0} />
-                            <InfoRow label="Retry Count" value={report.retry_count || 0} />
-                            <div className="pt-2">
-                                <p className="text-xs text-gray-500 uppercase font-bold mb-2">Tags</p>
-                                <div className="flex flex-wrap gap-1">
-                                    {(report.tags || []).length > 0 ? report.tags.map(tag => (
-                                        <span key={tag} className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] font-bold">{tag}</span>
-                                    )) : <span className="text-xs text-gray-400 italic">No tags</span>}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {/*<div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">*/}
+                    {/*    <SectionHeader icon={Tag} title="Technical Data" color="text-gray-400" />*/}
+                    {/*    <div className="space-y-2">*/}
+                    {/*        <InfoRow label="Views" value={report.view_count || 0} />*/}
+                    {/*        <InfoRow label="Retry Count" value={report.retry_count || 0} />*/}
+                    {/*        <div className="pt-2">*/}
+                    {/*            <p className="text-xs text-gray-500 uppercase font-bold mb-2">Tags</p>*/}
+                    {/*            <div className="flex flex-wrap gap-1">*/}
+                    {/*                {(report.tags || []).length > 0 ? report.tags.map(tag => (*/}
+                    {/*                    <span key={tag} className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] font-bold">{tag}</span>*/}
+                    {/*                )) : <span className="text-xs text-gray-400 italic">No tags</span>}*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
                     {/* Reporter Details */}
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
