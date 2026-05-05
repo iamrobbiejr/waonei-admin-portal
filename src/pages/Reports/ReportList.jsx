@@ -7,7 +7,8 @@ import {
     Filter,
     ChevronLeft,
     ChevronRight,
-    AlertCircle
+    AlertCircle,
+    Download
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '../../lib/utils';
@@ -54,6 +55,28 @@ const ReportList = () => {
         }
     };
 
+    const handleExport = async () => {
+        try {
+            const response = await api.get('/analytics/export', {
+                params: {
+                    status: statusFilter,
+                    violation_type: violationType === 'all' ? null : violationType
+                },
+                responseType: 'blob'
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `reports_${statusFilter}_${format(new Date(), 'yyyyMMdd')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (err) {
+            console.error("Export failed", err);
+            alert("Failed to export reports.");
+        }
+    };
+
     const getStatusColor = (status) => {
         switch (status) {
             case 'verified': return 'bg-green-100 text-green-800';
@@ -91,6 +114,15 @@ const ReportList = () => {
                         <option value="red_light">Red Light</option>
                         <option value="illegal_parking">Illegal Parking</option>
                     </select>
+
+                    <button
+                        onClick={handleExport}
+                        disabled={reports.length === 0}
+                        className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
+                    >
+                        <Download className="h-4 w-4 mr-2 text-gray-500" />
+                        Export
+                    </button>
                 </div>
             </div>
 

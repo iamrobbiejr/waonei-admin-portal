@@ -10,6 +10,8 @@ import PendingReportList from './pages/Reports/PendingReportList';
 import NoViolationReportList from './pages/Reports/NoViolationReportList';
 import ViolationHeatmap from './pages/Reports/ViolationHeatmap';
 import ReportDetail from './pages/Reports/ReportDetail';
+import ReportAnalytics from './pages/Reports/ReportAnalytics';
+import ReportSearch from './pages/Reports/ReportSearch';
 import CreateUser from './pages/Users/CreateUser';
 import AdminLayout from './components/admin/AdminLayout';
 
@@ -52,6 +54,8 @@ function App() {
                             <Route path="/no-violations" element={<NoViolationReportList />} />
                             <Route path="/heatmap" element={<ViolationHeatmap />} />
                             <Route path="/report/:id" element={<ReportDetail />} />
+                            <Route path="/analytics" element={<ReportAnalytics />} />
+                            <Route path="/search" element={<ReportSearch />} />
 
                             {/* Admin Only Route */}
                             <Route element={<AdminRoute />}>
