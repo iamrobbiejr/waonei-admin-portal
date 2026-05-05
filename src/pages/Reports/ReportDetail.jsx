@@ -218,12 +218,7 @@ const ReportDetail = () => {
                                     <p className="text-sm font-bold">{(report.confidence_score ? (report.confidence_score * 100).toFixed(1) : '0.0')}%</p>
                                 </div>
                             </div>
-                            <div className="md:col-span-2 lg:col-span-3">
-                                <p className="text-xs text-gray-500 uppercase font-bold mb-2">Analysis Result (JSON)</p>
-                                <pre className="bg-gray-50 p-4 rounded-xl text-xs overflow-x-auto border border-gray-100 text-gray-700 max-h-48">
-                                    {JSON.stringify(report.ai_analysis || {}, null, 2)}
-                                </pre>
-                            </div>
+
                         </div>
                     </div>
 
